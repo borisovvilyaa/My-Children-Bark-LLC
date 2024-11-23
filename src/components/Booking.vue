@@ -1,5 +1,5 @@
 <template>
-  <section class="booking-section" id="booking">
+  <section class="booking-section" id="services">
     <div class="container">
       <div class="section-header">
         <img

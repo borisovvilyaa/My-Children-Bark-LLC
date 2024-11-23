@@ -79,7 +79,7 @@ export default {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: linear-gradient(to right, #f9f9f9, #ffffff);
+  background: linear-gradient(to right, #f9f9f9, #fffbf4);
   transition: background-color 0.3s ease-in-out;
 }
 

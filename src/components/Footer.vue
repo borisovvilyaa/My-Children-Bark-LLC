@@ -46,11 +46,26 @@ export default {
 </script>
 
 <style scoped>
+/* Make the footer always at the bottom of the page */
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .footer-section {
   border-top: 1px solid #7d5d3b;
   background-color: #fff8ec; /* Soft warm background */
   padding: 60px 20px;
   color: #7d5d3b; /* Warm text color */
+  flex-shrink: 0; /* Prevent footer from shrinking */
+  width: 100%;
 }
 
 .footer-content {
@@ -58,21 +73,11 @@ export default {
   flex-direction: column;
   max-width: 1200px;
   margin: 0 auto;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-  }
 }
 
 .footer-item {
   width: 100%;
   margin-bottom: 30px;
-
-  @media (min-width: 768px) {
-    width: 30%;
-    margin-bottom: 0;
-  }
 }
 
 .footer-title {
@@ -98,15 +103,27 @@ export default {
   text-decoration: none;
   font-size: 16px;
   transition: color 0.3s ease;
+}
 
-  &:hover {
-    color: #9e7549;
-  }
+.footer-link:hover {
+  color: #9e7549;
 }
 
 .footer-info {
   font-size: 16px;
   margin-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .footer-item {
+    width: 30%;
+    margin-bottom: 0;
+  }
 }
 
 @media (max-width: 768px) {
