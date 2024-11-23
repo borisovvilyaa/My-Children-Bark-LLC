@@ -46,19 +46,6 @@ export default {
 </script>
 
 <style scoped>
-/* Make the footer always at the bottom of the page */
-body,
-html {
-  height: 100%;
-  margin: 0;
-}
-
-#app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 .footer-section {
   border-top: 1px solid #7d5d3b;
   background-color: #fff8ec; /* Soft warm background */

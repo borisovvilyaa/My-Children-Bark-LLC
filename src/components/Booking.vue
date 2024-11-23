@@ -243,7 +243,8 @@ export default {
 
   .service-item {
     padding: 25px;
-    border-radius: 12px; /* Rounded corners */
+    /* Убираем закругления */
+    border-radius: 0;
     transition: transform 0.3s ease;
     box-sizing: border-box;
     background-color: #fff; /* White background for cards */
@@ -337,7 +338,8 @@ export default {
   .modal-content {
     background-color: #fff;
     padding: 20px;
-    border-radius: 8px;
+    /* Убираем закругления */
+    border-radius: 0;
     max-width: 500px;
     width: 100%;
     text-align: center;
@@ -360,7 +362,8 @@ export default {
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    /* Убираем закругления */
+    border-radius: 0;
     cursor: pointer;
     transition: background-color 0.3s ease;
 
