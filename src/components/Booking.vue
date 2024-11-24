@@ -114,6 +114,8 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+
 export default {
   name: "BookingSection",
   data() {
@@ -257,19 +259,40 @@ export default {
       this.cart.splice(index, 1); // Remove item from cart
     },
     scheduleAppointment() {
-      // Создаем объект для логирования в формате JSON
       const orderDetails = this.cart.map((item) => ({
         service: item.service.title,
         option: item.option.label,
       }));
 
-      // Логируем заказ в формате JSON
+      // Логируем заказ в формате JSON до сохранения в cookies
       console.log("Scheduling appointment with the following details:");
-      console.log(JSON.stringify(orderDetails, null, 2)); // null, 2 для форматированного вывода с отступами
+      console.log(JSON.stringify(orderDetails, null, 2));
+
+      // Сохраняем данные в cookies
+      document.cookie = `orderDetails=${encodeURIComponent(
+        JSON.stringify(orderDetails)
+      )}; path=/; max-age=86400;`; // Сохраняем на 1 день
+
+      // Логируем, что данные успешно сохранены в cookies
+      console.log("Order details saved to cookies:");
+
+      // Чтение и вывод данных, сохраненных в cookies
+      const savedOrderDetails = Cookies.get("orderDetails");
+      if (savedOrderDetails) {
+        console.log(
+          "Saved order details from cookies:",
+          JSON.parse(decodeURIComponent(savedOrderDetails))
+        );
+      } else {
+        console.log("No order details found in cookies.");
+      }
 
       alert("Your appointment has been scheduled!");
-      this.cart = []; // Очищаем корзину после записи
-      this.isModalVisible = false;
+      this.cart = []; // Очистка корзины
+      this.isModalVisible = false; // Закрытие модального окна
+
+      // Редирект на страницу бронирования с передачей состояния
+      this.$router.push({ path: "/booking", state: { orderDetails } });
     },
     addAnotherService() {
       // Закрываем модальное окно
