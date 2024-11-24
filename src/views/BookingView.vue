@@ -303,8 +303,13 @@ export default {
     gap: 30px;
   }
 
-  .calendar {
+  .calendar,
+  .time-selection,
+  .booking-details {
     width: 30%;
+  }
+
+  .calendar {
     text-align: center;
     .calendar-header {
       margin-bottom: 10px;
@@ -358,7 +363,6 @@ export default {
   }
 
   .time-selection {
-    width: 40%;
     text-align: center;
     h2 {
       font-size: 24px;
@@ -384,7 +388,7 @@ export default {
         transition: 0.3s;
       }
       .selected-time {
-        background-color: #bb8b5a; /* Background color for selected time slot */
+        background-color: #bb8b5a;
         color: white;
         border-color: #bb8b5a;
       }
@@ -396,7 +400,6 @@ export default {
   }
 
   .booking-details {
-    width: 30%;
     text-align: left;
     h3 {
       font-size: 22px;
@@ -469,6 +472,96 @@ export default {
     }
     button:hover {
       background-color: #9e7549;
+    }
+  }
+
+  @media (max-width: 1280px) {
+    margin-top: 100px;
+    .booking-main {
+      flex-direction: column;
+    }
+
+    .calendar,
+    .time-selection,
+    .booking-details {
+      width: 100%;
+    }
+
+    .time-selection .time-slots {
+      grid-template-columns: 1fr; /* Single column for smaller screens */
+    }
+
+    .client-details {
+      margin-top: 10px;
+    }
+
+    .booking-content {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .calendar-header h3,
+    .time-selection h2 {
+      font-size: 20px;
+    }
+
+    .calendar-table th,
+    .calendar-table td {
+      font-size: 16px;
+      padding: 8px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 80px 20px;
+
+    .calendar-header h3,
+    .time-selection h2 {
+      font-size: 18px;
+    }
+
+    .time-selection .time-slots {
+      grid-template-columns: 1fr;
+    }
+
+    .client-details input,
+    .client-details textarea {
+      font-size: 14px;
+    }
+
+    .client-details button {
+      font-size: 16px;
+    }
+
+    .next-btn {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 60px 10px;
+    .calendar-header h3,
+    .time-selection h2 {
+      font-size: 16px;
+    }
+
+    .time-selection .time-slots {
+      grid-template-columns: 1fr; /* Stack the time slots */
+    }
+
+    .booking-details h3 {
+      font-size: 18px;
+    }
+
+    .client-details label,
+    .client-details input,
+    .client-details textarea {
+      font-size: 14px;
+    }
+
+    .next-btn {
+      font-size: 14px;
+      padding: 10px 20px;
     }
   }
 }
