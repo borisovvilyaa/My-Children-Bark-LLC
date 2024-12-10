@@ -1,124 +1,18 @@
 <template>
   <section class="booking-section" id="booking">
-    <div class="booking-content container">
-      <div class="booking-main">
-        <!-- Calendar on the left -->
-        <div class="calendar">
-          <div class="calendar-header">
-            <div class="calendar-nav">
-              <i class="bi bi-chevron-left" @click="changeMonth(-1)"></i>
-              <h3>{{ monthName }} {{ year }}</h3>
-              <i class="bi bi-chevron-right" @click="changeMonth(1)"></i>
-            </div>
-          </div>
-
-          <table class="calendar-table">
-            <thead>
-              <tr>
-                <th>Sun</th>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(week, index) in weeksInMonth" :key="index">
-                <td
-                  v-for="(day, i) in week"
-                  :key="i"
-                  @click="selectDate(day)"
-                  :class="{
-                    selected: selectedDate && selectedDate.getDate() === day,
-                    disabled: isDateDisabled(day),
-                    empty: day === null,
-                  }"
-                  :disabled="isDateDisabled(day) || day === null"
-                >
-                  {{ day }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Book Your Pet's Stay</h2>
+      </div>
+      <div class="booking-container">
+        <div class="form-column">
+          <PetDetailsForm
+            :petDetails="petDetails"
+            :handleFormSubmit="handleFormSubmit"
+          />
         </div>
-
-        <!-- Time slots in the center -->
-        <div class="time-selection">
-          <h2>Available Slots</h2>
-          <div v-if="selectedDate">
-            <p>{{ selectedDateText }}</p>
-            <div class="time-slots">
-              <button
-                v-for="(time, index) in availableTimes"
-                :key="index"
-                class="time-slot-btn"
-                :class="{
-                  'selected-time': selectedTime === time,
-                  'unselected-time':
-                    selectedTime !== time && selectedTime !== null,
-                }"
-                @click="selectTime(time)"
-              >
-                {{ time }}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Booking details on the right -->
-        <div class="booking-details">
-          <h3>Booking Details</h3>
-          <div v-for="(order, index) in orders" :key="index" class="order-item">
-            <div class="order-header">
-              <strong class="service-name">{{ order.service }}</strong>
-            </div>
-            <div class="order-body">
-              <p><span class="label">Option:</span> {{ order.option }}</p>
-              <p>
-                <span class="label">Duration:</span> {{ order.duration }} hours
-              </p>
-            </div>
-          </div>
-
-          <!-- Client Details Form -->
-          <div class="client-details">
-            <h3>Tell us a bit about yourself</h3>
-            <form @submit.prevent="handleFormSubmit">
-              <label for="name">Name *</label>
-              <input
-                type="text"
-                id="name"
-                v-model="clientDetails.name"
-                required
-                placeholder="Your name"
-              />
-              <label for="email">Email *</label>
-              <input
-                type="email"
-                id="email"
-                v-model="clientDetails.email"
-                required
-                placeholder="Your email"
-              />
-              <label for="phone">Phone Number</label>
-              <input
-                type="text"
-                id="phone"
-                v-model="clientDetails.phone"
-                placeholder="Your phone number"
-              />
-              <label for="message">Add Your Message</label>
-              <textarea
-                id="message"
-                v-model="clientDetails.message"
-                placeholder="Your message"
-              ></textarea>
-
-              <button type="submit" class="btn next-btn">Submit</button>
-            </form>
-          </div>
+        <div class="orders-column">
+          <OrdersSection :orders="orders" />
         </div>
       </div>
     </div>
@@ -127,442 +21,113 @@
 
 <script>
 import Cookies from "js-cookie";
+import PetDetailsForm from "./PetDetailsForm.vue";
+import OrdersSection from "./OrdersSection.vue";
 
 export default {
   name: "BookingPage",
+  components: {
+    PetDetailsForm,
+    OrdersSection,
+  },
   data() {
     return {
-      selectedDate: null,
-      selectedTime: null,
-      currentMonth: new Date().getMonth(),
-      currentYear: new Date().getFullYear(),
-      year: new Date().getFullYear(),
-      currentDate: new Date(),
-      orders: [],
-      clientDetails: {
+      petDetails: {
         name: "",
-        email: "",
-        phone: "",
-        message: "",
+        birthday: "",
+        breed: "",
+        weight: "",
+        sex: "",
+        spayNeutered: "",
+        microchipped: "",
+        houseTrained: "",
+        dogFriendly: "",
+        catFriendly: "",
+        kidsFriendly: "",
+        feedingSchedule: "",
+        aloneTime: "",
+        vetInfo: "",
       },
-      availableTimes: ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM", "5:00 PM"], // Временные слоты
+      orders: [],
     };
   },
   created() {
     const orderDetailsCookie = Cookies.get("orderDetails");
-
     if (orderDetailsCookie) {
-      try {
-        const orderDetails = JSON.parse(orderDetailsCookie);
-        this.orders = orderDetails.map((order) => {
-          const duration = this.getDuration(order.option);
-          return {
-            service: order.service || "Service not specified",
-            option: order.option || "Option not specified",
-            duration: duration || 1,
-          };
-        });
-
-        if (orderDetails[0]?.selectedDate) {
-          const dateParts = orderDetails[0].selectedDate.split("-");
-          this.selectedDate = new Date(
-            dateParts[0],
-            dateParts[1] - 1,
-            dateParts[2]
-          );
-        }
-      } catch (error) {
-        console.error("Error parsing cookies:", error);
-      }
+      this.orders = JSON.parse(orderDetailsCookie);
     }
   },
-  computed: {
-    monthName() {
-      return new Date(this.currentYear, this.currentMonth).toLocaleString(
-        "default",
-        { month: "long" }
-      );
-    },
-    weeksInMonth() {
-      const date = new Date(this.currentYear, this.currentMonth, 1);
-      const daysInMonth = new Date(
-        this.currentYear,
-        this.currentMonth + 1,
-        0
-      ).getDate();
-      const weeks = [];
-      let day = 1;
-      const startDay = date.getDay();
-      let week = Array(7).fill(null);
-
-      for (let i = startDay; i < 7; i++) {
-        if (day <= daysInMonth) {
-          week[i] = day++;
-        }
-      }
-      weeks.push(week);
-
-      while (day <= daysInMonth) {
-        week = Array(7).fill(null);
-        for (let i = 0; i < 7; i++) {
-          if (day <= daysInMonth) {
-            week[i] = day++;
-          }
-        }
-        weeks.push(week);
-      }
-
-      return weeks;
-    },
-    selectedDateText() {
-      if (!this.selectedDate) return "Select a date";
-      const options = { weekday: "long", month: "long", day: "numeric" };
-      return this.selectedDate.toLocaleDateString("en-US", options);
-    },
-  },
   methods: {
-    getDuration(option) {
-      if (option.includes("Hour")) {
-        const match = option.match(/(\d+)-Hour/);
-        if (match) {
-          return parseInt(match[1], 10);
-        }
-      }
-      return 1; // Default duration is 1 hour
-    },
-    changeMonth(offset) {
-      const newMonth = this.currentMonth + offset;
-      if (newMonth < 0) {
-        this.currentMonth = 11;
-        this.currentYear--;
-      } else if (newMonth > 11) {
-        this.currentMonth = 0;
-        this.currentYear++;
-      } else {
-        this.currentMonth = newMonth;
-      }
-
-      if (this.selectedDate) {
-        const daysInNewMonth = new Date(
-          this.currentYear,
-          this.currentMonth + 1,
-          0
-        ).getDate();
-        if (this.selectedDate.getMonth() !== this.currentMonth) {
-          this.selectedDate = null;
-        } else if (this.selectedDate.getDate() > daysInNewMonth) {
-          this.selectedDate = new Date(
-            this.currentYear,
-            this.currentMonth,
-            daysInNewMonth
-          );
-        }
-      }
-    },
-    selectDate(date) {
-      if (date && !this.isDateDisabled(date)) {
-        this.selectedDate = new Date(this.currentYear, this.currentMonth, date);
-      }
-    },
-    isDateDisabled(date) {
-      if (date === null) return true;
-      const selectedDate = new Date(this.currentYear, this.currentMonth, date);
-      return selectedDate < this.currentDate;
-    },
-    selectTime(time) {
-      this.selectedTime = this.selectedTime === time ? null : time; // Toggle selection
+    handleFormSubmit() {
+      console.log("Form submitted with pet details:", this.petDetails);
     },
   },
 };
 </script>
-<style lang="scss" scoped>
+
+<style scoped>
 .booking-section {
-  position: relative;
+  background: linear-gradient(to bottom, #f1e6d3, #d9c9a5);
   display: flex;
-  justify-content: center;
-  background-color: #fffbf4;
-  padding: 150px;
-  color: #bb8b5a;
-  background-image: url("@/assets/Home/wave.svg");
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  background-position: bottom center;
-  overflow: hidden;
+  flex-direction: column;
+  margin-top: 100px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
-  .booking-content {
-    display: flex;
-    gap: 30px;
-    max-width: 1200px;
-    width: 100%;
-  }
+.booking-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+}
 
-  .booking-main {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    gap: 30px;
-  }
+.form-column,
+.orders-column {
+  flex: 1;
+  min-width: 48%; /* Ensures that the columns don't shrink too much */
+}
 
-  .calendar,
-  .time-selection,
-  .booking-details {
-    width: 30%;
-  }
+.section-header {
+  margin-bottom: 20px;
+  text-align: center;
+}
 
-  .calendar {
-    text-align: center;
-    .calendar-header {
-      margin-bottom: 10px;
-      p {
-        font-size: 16px;
-        color: #9e7549;
-        font-weight: 300;
-      }
-      h3 {
-        font-size: 24px;
-        font-weight: 400;
-        color: #bb8b5a;
-      }
-      .calendar-nav {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 10px;
-        i {
-          font-size: 24px;
-          cursor: pointer;
-          color: #9e7549;
-        }
-      }
-    }
-    .calendar-table {
-      width: 100%;
-      margin-top: 10px;
-      border-collapse: collapse;
-      th,
-      td {
-        width: 14.28%;
-        padding: 10px;
-        text-align: center;
-        font-size: 18px;
-        cursor: pointer;
-      }
-      td.selected {
-        background-color: #bb8b5a;
-        color: white;
-      }
-      td.disabled {
-        color: #d3d3d3;
-        cursor: not-allowed;
-      }
-      td.empty {
-        background-color: transparent;
-        cursor: default;
-      }
-    }
-  }
+.form-group {
+  margin-bottom: 15px;
+}
 
-  .time-selection {
-    text-align: center;
-    h2 {
-      font-size: 24px;
-      color: #9e7549;
-      margin-bottom: 20px;
-      font-weight: 400;
-    }
-    .time-slots {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Creates 2 equal columns */
-      gap: 10px; /* Adds space between buttons */
-      margin-top: 10px;
-      justify-content: center;
+.btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s, transform 0.2s;
+}
 
-      button {
-        background-color: transparent;
-        color: #bb8b5a;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 0;
-        transition: 0.3s;
-      }
-      .selected-time {
-        background-color: #bb8b5a;
-        color: white;
-        border-color: #bb8b5a;
-      }
-      button:hover {
-        background-color: #9e7549;
-        color: #ffffff;
-      }
-    }
-  }
+.primary-btn {
+  background-color: #4d3b2e;
+  color: #fff;
+}
+.btn:hover {
+  transform: scale(1.05);
+}
 
-  .booking-details {
-    text-align: left;
-    h3 {
-      font-size: 22px;
-      color: #bb8b5a;
-    }
-    .details-item {
-      margin-bottom: 10px;
-      font-size: 18px;
-      font-weight: 300;
-    }
-    .edit-details {
-      font-size: 16px;
-      color: #9e7549;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .next-btn {
-      background-color: #bb8b5a;
-      color: white;
-      padding: 12px 24px;
-      border: none;
-      text-transform: uppercase;
-      font-weight: 600;
-      font-size: 18px;
-      cursor: pointer;
-      border-radius: 0;
-      transition: 0.3s;
-      margin-top: 20px;
-    }
-    .next-btn:hover {
-      background-color: #9e7549;
-    }
-  }
+.d-flex {
+  display: flex;
+  gap: 10px;
+}
 
-  .client-details {
-    margin-top: 20px;
+input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s;
+}
 
-    label {
-      font-size: 16px;
-      font-weight: 600;
-      color: #9e7549;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      background-color: #fffbf4;
-    }
-
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    button {
-      background-color: #bb8b5a;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 18px;
-      cursor: pointer;
-      border-radius: 0;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #9e7549;
-    }
-  }
-
-  @media (max-width: 1280px) {
-    margin-top: 100px;
-    .booking-main {
-      flex-direction: column;
-    }
-
-    .calendar,
-    .time-selection,
-    .booking-details {
-      width: 100%;
-    }
-
-    .time-selection .time-slots {
-      grid-template-columns: 1fr; /* Single column for smaller screens */
-    }
-
-    .client-details {
-      margin-top: 10px;
-    }
-
-    .booking-content {
-      flex-direction: column;
-      gap: 40px;
-    }
-
-    .calendar-header h3,
-    .time-selection h2 {
-      font-size: 20px;
-    }
-
-    .calendar-table th,
-    .calendar-table td {
-      font-size: 16px;
-      padding: 8px;
-    }
-  }
-
-  @media (max-width: 768px) {
-    padding: 80px 20px;
-
-    .calendar-header h3,
-    .time-selection h2 {
-      font-size: 18px;
-    }
-
-    .time-selection .time-slots {
-      grid-template-columns: 1fr;
-    }
-
-    .client-details input,
-    .client-details textarea {
-      font-size: 14px;
-    }
-
-    .client-details button {
-      font-size: 16px;
-    }
-
-    .next-btn {
-      font-size: 16px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    padding: 60px 10px;
-    .calendar-header h3,
-    .time-selection h2 {
-      font-size: 16px;
-    }
-
-    .time-selection .time-slots {
-      grid-template-columns: 1fr; /* Stack the time slots */
-    }
-
-    .booking-details h3 {
-      font-size: 18px;
-    }
-
-    .client-details label,
-    .client-details input,
-    .client-details textarea {
-      font-size: 14px;
-    }
-
-    .next-btn {
-      font-size: 14px;
-      padding: 10px 20px;
-    }
-  }
+input[type="date"]:focus {
+  border-color: #4d3b2e;
+  outline: none;
 }
 </style>

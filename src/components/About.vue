@@ -18,6 +18,7 @@
             there is no one I trust more with my babies."
           </p>
           <p class="testimonial-author">- Linda B., NV</p>
+          <hr class="testimonial-divider" />
           <p class="testimonial-service">House Sitting - December 2023</p>
         </div>
 
@@ -28,6 +29,7 @@
             my go-to for dog care when I'm on vacation."
           </p>
           <p class="testimonial-author">- Eisha A., CA</p>
+          <hr class="testimonial-divider" />
           <p class="testimonial-service">Day Care - August 2024</p>
         </div>
 
@@ -43,6 +45,7 @@
             services again. Well worth it!"
           </p>
           <p class="testimonial-author">- Krystal W., CA</p>
+          <hr class="testimonial-divider" />
           <p class="testimonial-service">Boarding - October 2024</p>
         </div>
       </div>
@@ -96,7 +99,7 @@ export default {
     box-sizing: border-box;
 
     .testimonial-text {
-      font-size: 16px;
+      font-size: 18px;
       line-height: 1.6;
       color: #7d5d3b;
       margin-bottom: 20px;
@@ -113,6 +116,13 @@ export default {
     .testimonial-service {
       font-size: 14px;
       color: #9e7549;
+    }
+
+    .testimonial-divider {
+      border: none;
+      height: 1px;
+      background-color: #bb8b5a; /* Change color for better readability */
+      margin: 10px 0; /* Add spacing around the line */
     }
   }
 

@@ -31,7 +31,7 @@
             <div class="service-content">
               <h3 class="service-title">{{ service.title }}</h3>
               <p class="service-description">{{ service.description }}</p>
-              <p class="service-price">From {{ service.price }}</p>
+              <p class="service-price">From ${{ service.price.toFixed(2) }}</p>
             </div>
           </a>
         </div>
@@ -91,7 +91,6 @@
           </div>
 
           <!-- Modal Actions -->
-          <!-- Дополнительная кнопка для добавления услуги -->
           <div v-if="currentModal === 'cart'" class="add-another-service">
             <p>Do you want to add another service to this appointment?</p>
             <button @click="addAnotherService">
@@ -125,68 +124,136 @@ export default {
           title: "Boarding",
           description:
             "Need a safe and loving place for your dog while you're away?",
-          price: "From $75",
+          price: 75.0,
           image: "Boarding.jpg",
           options: [
-            { value: "baseRate", label: "Base Rate / per night - $75" },
-            { value: "puppyRate", label: "Puppy Rate - $81" },
-            { value: "holidayRate", label: "Holiday Rate / per night - $90" },
+            {
+              value: "baseRate",
+              label: "Base Rate / per night - $75",
+              price: 75.0,
+            },
+            { value: "puppyRate", label: "Puppy Rate - $81", price: 81.0 },
+            {
+              value: "holidayRate",
+              label: "Holiday Rate / per night - $90",
+              price: 90.0,
+            },
           ],
         },
         {
           title: "Doggy Day Care",
           description:
             "Looking for a safe and fun spot for your pup for the day or while you're away?",
-          price: "From $25",
+          price: 25.0,
           image: "Day Care.jpg",
           options: [
-            { value: "halfDay", label: "Half Day ( ≤ 5hours) - $25" },
-            { value: "puppyHalf", label: "Puppy Half ( ≤ 5hours) - $32" },
-            { value: "holidayHalf", label: "Holiday Half ( ≤ 5hours) - $40" },
-            { value: "fullDay", label: "Full Day ( ≥ 6hours) - $50" },
-            { value: "puppyFull", label: "Puppy Full ( ≥ 6hours) - $63" },
-            { value: "holidayFull", label: "Holiday Full ( ≥ 6hours) - $80" },
+            {
+              value: "halfDay",
+              label: "Half Day ( ≤ 5hours) - $25",
+              price: 25.0,
+            },
+            {
+              value: "puppyHalf",
+              label: "Puppy Half ( ≤ 5hours) - $32",
+              price: 32.0,
+            },
+            {
+              value: "holidayHalf",
+              label: "Holiday Half ( ≤ 5hours) - $40",
+              price: 40.0,
+            },
+            {
+              value: "fullDay",
+              label: "Full Day ( ≥ 6hours) - $50",
+              price: 50.0,
+            },
+            {
+              value: "puppyFull",
+              label: "Puppy Full ( ≥ 6hours) - $63",
+              price: 63.0,
+            },
+            {
+              value: "holidayFull",
+              label: "Holiday Full ( ≥ 6hours) - $80",
+              price: 80.0,
+            },
           ],
         },
         {
           title: "Dog Walking",
           description:
             "Adventure Awaits – One Step at a Time, Ready for the Journey!",
-          price: "From $30",
+          price: 30.0,
           image: "Dog Walking.jpg",
           options: [
-            { value: "30min", label: "30-minute - $30" },
-            { value: "puppy30min", label: "Puppy 30-minute - $35" },
-            { value: "holiday30min", label: "Holiday 30-minute - $45" },
-            { value: "60min", label: "60-Minute - $50" },
-            { value: "puppy60min", label: "Puppy 60-minute - $60" },
-            { value: "holiday60min", label: "Holiday 60-minute - $85" },
+            { value: "30min", label: "30-minute - $30", price: 30.0 },
+            {
+              value: "puppy30min",
+              label: "Puppy 30-minute - $35",
+              price: 35.0,
+            },
+            {
+              value: "holiday30min",
+              label: "Holiday 30-minute - $45",
+              price: 45.0,
+            },
+            { value: "60min", label: "60-Minute - $50", price: 50.0 },
+            {
+              value: "puppy60min",
+              label: "Puppy 60-minute - $60",
+              price: 60.0,
+            },
+            {
+              value: "holiday60min",
+              label: "Holiday 60-minute - $85",
+              price: 85.0,
+            },
           ],
         },
         {
           title: "House Sitting",
           description:
             "Comfort, Care, and Companionship – Right at Home for Your Furry Family!",
-          price: "From $100",
+          price: 100.0,
           image: "House sitting.jpg",
           options: [
-            { value: "catRate", label: "Cat Rate / per night - $100" },
-            { value: "baseRate", label: "Base Rate / per night - $125" },
-            { value: "holidayRate", label: "Holiday Rate / per night - $150" },
-            { value: "puppyRate", label: "Puppy Rate / per night - $150" },
+            {
+              value: "catRate",
+              label: "Cat Rate / per night - $100",
+              price: 100.0,
+            },
+            {
+              value: "baseRate",
+              label: "Base Rate / per night - $125",
+              price: 125.0,
+            },
+            {
+              value: "holidayRate",
+              label: "Holiday Rate / per night - $150",
+              price: 150.0,
+            },
+            {
+              value: "puppyRate",
+              label: "Puppy Rate / per night - $150",
+              price: 150.0,
+            },
           ],
         },
         {
           title: "Drop-in Home Visit",
           description: "Quick Visits, Big Love – Keeping Pets Happy at Home!",
-          price: "From $50",
+          price: 50.0,
           image: "Drop in Visit.jpg",
           options: [
-            { value: "catRate", label: "Cat Rate - $50" },
-            { value: "hourRate", label: "1-Hour Rate - $63" },
-            { value: "puppyRate", label: "Puppy Rate - $69" },
-            { value: "holidayRate", label: "Holiday Rate - $75" },
-            { value: "overHourRate", label: "> 1-Hour Rate - $101" },
+            { value: "catRate", label: "Cat Rate - $50", price: 50.0 },
+            { value: "hourRate", label: "1-Hour Rate - $63", price: 63.0 },
+            { value: "puppyRate", label: "Puppy Rate - $69", price: 69.0 },
+            { value: "holidayRate", label: "Holiday Rate - $75", price: 75.0 },
+            {
+              value: "overHourRate",
+              label: "> 1-Hour Rate - $101",
+              price: 101.0,
+            },
           ],
         },
       ],
@@ -352,14 +419,15 @@ export default {
     gap: 30px;
     padding: 0 20px;
   }
-
+  .service-link {
+    text-decoration: none;
+  }
   .service-item {
     padding: 25px;
     border-radius: 0;
     transition: transform 0.3s ease;
     background-color: #fff;
     border: 1px solid #7d5d3b;
-
     .image-container {
       width: 100%;
       height: 250px;

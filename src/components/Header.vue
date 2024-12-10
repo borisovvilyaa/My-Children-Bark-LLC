@@ -2,12 +2,12 @@
   <header class="header-section" id="header">
     <div class="container">
       <nav class="navbar">
-        <!-- Лого -->
-        <div class="logo">
+        <!-- Logo -->
+        <div class="logo" @click="goToHomePage">
           <img src="@/assets/logo.jpg" alt="Logo" class="header-logo" />
         </div>
 
-        <!-- Меню -->
+        <!-- Menu -->
         <div class="hamburger-menu">
           <input
             id="menu__toggle"
@@ -22,15 +22,17 @@
           <div class="menu__box" :class="{ 'menu__box--open': isMenuOpen }">
             <ul>
               <li>
-                <a class="menu__item" href="#services" @click="closeMenu"
+                <a class="menu__item" href="/#services" @click="closeMenu"
                   >Service</a
                 >
               </li>
               <li>
-                <a class="menu__item" href="#about" @click="closeMenu">About</a>
+                <a class="menu__item" href="/#about" @click="closeMenu"
+                  >About</a
+                >
               </li>
               <li>
-                <a class="menu__item" href="#contact" @click="closeMenu"
+                <a class="menu__item" href="/#contact" @click="closeMenu"
                   >Contact</a
                 >
               </li>
@@ -38,7 +40,7 @@
           </div>
         </div>
 
-        <!-- Меню на десктопе -->
+        <!-- Desktop Menu -->
         <div class="desktop-menu">
           <ul>
             <li><a class="menu__item" href="#services">Service</a></li>
@@ -68,6 +70,9 @@ export default {
     closeMenu() {
       this.isMenuOpen = false;
     },
+    goToHomePage() {
+      window.location.href = "/"; // Путь к главной странице
+    },
   },
 };
 </script>
@@ -94,6 +99,7 @@ export default {
 .logo {
   flex: 1;
   transition: transform 0.3s ease;
+  cursor: pointer; /* Добавлен курсор для индикации кликабельности */
 }
 
 .header-logo {
