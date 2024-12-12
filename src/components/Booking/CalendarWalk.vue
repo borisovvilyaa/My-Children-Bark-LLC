@@ -166,20 +166,18 @@ export default {
     },
     resetDates() {
       this.selectedDates = [];
-      this.selectedDuration = "30"; // Reset duration to default
+      this.selectedDuration = "60"; // Reset duration to default
     },
     saveDates() {
-      const formattedDates = this.selectedDates.map((date) =>
-        date.toISOString()
-      );
-      this.$emit("update:dates", {
-        dates: formattedDates,
-        duration: this.selectedDuration,
-      });
-      console.log("Selected Dates:", this.selectedDates);
-      console.log("Duration:", this.selectedDuration);
+      const dateRange = {
+        dates: this.selectedDates.length > 0 ? this.selectedDates : [],
+        duration: this.selectedDuration ? [this.selectedDuration] : [],
+        formatted: this.formattedDateRange,
+      };
 
-      this.$emit("save"); // Закрываем модальное окно
+      console.log("Saved date range:", dateRange);
+      this.$emit("update:dates", dateRange); // Передача данных наверх
+      this.$emit("save", dateRange); // Emit saved data
     },
   },
 };

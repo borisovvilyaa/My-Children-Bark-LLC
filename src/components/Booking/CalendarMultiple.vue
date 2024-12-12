@@ -194,16 +194,18 @@ export default {
       this.endTime = null;
     },
     saveDates() {
-      if (this.startTime && this.endTime) {
-        const startHour = parseInt(this.startTime.split(":")[0], 10);
-        const endHour = parseInt(this.endTime.split(":")[0], 10);
+      console.log("saveDates method triggered");
+      // Формируем объект для сохранения
+      const dateRange = {
+        dates: this.selectedDates.length > 0 ? this.selectedDates : [],
+        duration: [this.startTime, this.endTime], // Список продолжительности
+        formatted: this.formattedDateRange, // Форматированный диапазон
+      };
 
-        if (endHour < startHour) {
-          alert("End time cannot be earlier than start time.");
-          return;
-        }
-      }
-      alert(`Saved dates: ${this.formattedDateRange}`);
+      console.log("Saved date range:", dateRange);
+      this.$emit("save", dateRange); // Отправляем данные наверх
+
+      this.$emit("update:dates", dateRange); // Передача данных наверх
     },
   },
 };

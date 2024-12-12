@@ -192,7 +192,29 @@ export default {
       this.endTime = null;
     },
     saveDates() {
-      alert(`Saved range: ${this.formattedDateRange}`);
+      // Если есть начальная и конечная дата
+      if (this.startDate && this.endDate) {
+        const start = new Date(this.startDate);
+        const end = new Date(this.endDate);
+        const dates = [];
+
+        // Генерируем все даты между startDate и endDate
+        while (start <= end) {
+          dates.push(new Date(start));
+          start.setDate(start.getDate() + 1); // Увеличиваем дату на 1 день
+        }
+
+        // Формируем объект для сохранения
+        const dateRange = {
+          dates: dates, // Массив всех дат в промежутке
+          duration: [this.startTime, this.endTime], // Список продолжительности
+          formatted: this.formattedDateRange, // Форматированный диапазон
+        };
+
+        console.log("Saved date range:", dateRange);
+        this.$emit("update:dates", dateRange); // Передача данных наверх
+        this.$emit("save", dateRange); // Отправляем данные наверх
+      }
     },
   },
 };

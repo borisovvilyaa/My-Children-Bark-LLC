@@ -21,8 +21,8 @@
 
 <script>
 import Cookies from "js-cookie";
-import PetDetailsForm from "./PetDetailsForm.vue";
 import OrdersSection from "./OrdersSection.vue";
+import PetDetailsForm from "./PetDetailsForm.vue";
 
 export default {
   name: "BookingPage",

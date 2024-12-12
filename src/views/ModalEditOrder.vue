@@ -6,16 +6,16 @@
         <i class="bi bi-x-lg"></i>
       </button>
       <h3>Edit Order</h3>
-      <form @submit.prevent="updateOrder">
+      <form @submit.prevent="saveAndClose">
         <div class="form-group">
           <!-- Render the appropriate calendar based on the service type -->
           <component
             :is="getCalendarComponent(localOrder.service)"
             v-model="localOrder.selectedDate"
             @update:dates="updateSelectedDate"
-            @save="saveAndClose"
           />
         </div>
+        <button type="submit" class="primary-btn">Save</button>
       </form>
     </div>
   </div>
@@ -42,24 +42,32 @@ export default {
     };
   },
   methods: {
-    updateSelectedDate({ dates, duration }) {
-      this.localOrder.selectedDate = { dates, duration };
+    // Обновление выбранных дат
+    updateSelectedDate({ dates, duration, formatted }) {
+      this.localOrder.selectedDate = { dates, duration, formatted };
+      console.log(
+        "Selected Date Range in Modal:",
+        this.localOrder.selectedDate
+      );
     },
+
+    // Закрытие модального окна
     closeModal() {
       this.$emit("close");
     },
+
+    // Сохранение изменений и закрытие модального окна
     saveAndClose() {
-      this.updateOrder(); // Сохраняем изменения
-      this.closeModal(); // Закрываем модальное окно
+      this.updateOrder();
+      this.closeModal();
     },
+
+    // Обновление заказа
     updateOrder() {
-      // Обновляем данные заказа и отправляем родителю
       this.$emit("update", this.localOrder);
     },
 
-    updateLocalOrder(newOrder) {
-      this.localOrder = { ...newOrder };
-    },
+    // Получение компонента календаря в зависимости от типа услуги
     getCalendarComponent(serviceType) {
       switch (serviceType) {
         case "Boarding":
@@ -68,7 +76,6 @@ export default {
         case "Doggy Day Care":
           return "CalendarMultiple";
         case "Dog Walking":
-          return "CalendarWalk";
         case "Drop-in Home Visit":
           return "CalendarWalk";
         default:
@@ -77,7 +84,13 @@ export default {
     },
   },
   watch: {
-    currentOrder: "updateLocalOrder",
+    // Обновление локального заказа при изменении переданного заказа
+    currentOrder: {
+      handler(newOrder) {
+        this.localOrder = { ...newOrder };
+      },
+      deep: true,
+    },
   },
 };
 </script>
@@ -103,7 +116,7 @@ export default {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 1100px;
-  position: relative; /* For positioning the close button */
+  position: relative;
   animation: slideUp 0.3s;
 }
 
@@ -116,55 +129,14 @@ export default {
   font-size: 1.5rem;
   color: #4d3b2e;
   cursor: pointer;
-  &:hover {
-    background: none !important;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(20px);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  background-color: #f0f0f0;
-  cursor: not-allowed;
-  transition: border-color 0.3s;
-}
-
-input[type="text"]:focus {
-  border-color: #4d3b2e;
-  outline: none;
 }
 
 .primary-btn {
   background-color: #4d3b2e;
   color: #fff;
-}
-
-.d-flex {
-  display: flex;
-  gap: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 </style>
