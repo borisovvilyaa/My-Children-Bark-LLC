@@ -323,9 +323,11 @@ export default {
       }
     }
   }
+
   .time-selector {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
   }
 
   .time-selector-group {
@@ -360,6 +362,68 @@ export default {
   select:focus {
     border-color: #9e7549;
     box-shadow: 0 0 5px rgba(158, 117, 73, 0.5);
+  }
+
+  .calendar-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Адаптивность */
+  @media (max-width: 768px) {
+    .calendars {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .calendar {
+      min-width: 100%;
+    }
+
+    .calendar-header p {
+      font-size: 12px;
+    }
+
+    .calendar-header h3 {
+      font-size: 18px;
+    }
+
+    .calendar-table th,
+    .calendar-table td {
+      font-size: 14px;
+    }
+
+    select {
+      width: 100%;
+    }
+
+    .time-selector-group {
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .calendar-header p {
+      font-size: 10px;
+    }
+
+    .calendar-header h3 {
+      font-size: 16px;
+    }
+
+    .calendar-table th,
+    .calendar-table td {
+      font-size: 12px;
+    }
+
+    .calendar-actions {
+      flex-direction: column;
+    }
+
+    button {
+      width: 100%;
+    }
   }
 }
 </style>

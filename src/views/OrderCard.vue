@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       showModal: false,
-      localOrder: { ...this.order }, // Создаем копию заказа
+      localOrder: { ...this.order },
     };
   },
   methods: {
@@ -49,11 +49,10 @@ export default {
     },
     handleUpdate(updatedOrder) {
       console.log("Updated Order:", updatedOrder);
-      this.localOrder.date = updatedOrder.selectedDate.formatted; // Обновляем дату в локальной копии
+      this.localOrder.date = updatedOrder.selectedDate.formatted;
     },
   },
   watch: {
-    // Обновляем локальный заказ при изменении родительского заказа
     order: {
       handler(newOrder) {
         this.localOrder = { ...newOrder };

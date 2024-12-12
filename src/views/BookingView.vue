@@ -70,8 +70,7 @@ export default {
   background: linear-gradient(to bottom, #f1e6d3, #d9c9a5);
   display: flex;
   flex-direction: column;
-  margin-top: 100px;
-  padding: 20px;
+  padding: 150px 0 100px 0;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }

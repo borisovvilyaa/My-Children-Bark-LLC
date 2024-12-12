@@ -63,7 +63,7 @@
 
     <div class="calendar-actions d-flex gap-2 mt-5">
       <button @click="resetDates">Reset dates</button>
-      <button class="save" @click="saveDates">Save</button>
+      <button class="save" @click="saveDates">Save dates</button>
     </div>
   </div>
 </template>
@@ -256,32 +256,105 @@ export default {
       }
     }
   }
-}
-.duration-buttons {
-  display: flex;
-  gap: 15px;
-  margin-top: 20px; // To add space between the calendar and duration options
 
-  .duration-option {
+  .duration-buttons {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 18px;
-    font-size: 16px;
-    font-weight: 500;
-    background-color: #fff;
-    color: #bb8b5a;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    gap: 15px;
+    margin-top: 20px;
 
-    &.active {
-      background-color: #bb8b5a;
-      color: #fff;
+    .duration-option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      font-size: 16px;
+      font-weight: 500;
+      background-color: #fff;
+      color: #bb8b5a;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s, transform 0.3s;
+
+      &.active {
+        background-color: #bb8b5a;
+        color: #fff;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(187, 139, 90, 0.6);
+      }
+    }
+  }
+
+  .calendar-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 480px) {
+    .calendar-actions {
+      flex-direction: column;
+    }
+  }
+
+  // Media Queries
+  @media (max-width: 768px) {
+    .calendars {
+      flex-direction: column;
+      gap: 10px;
+
+      .calendar {
+        min-width: 100%;
+      }
     }
 
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 5px rgba(187, 139, 90, 0.6);
+    .calendar-header p {
+      font-size: 12px;
+    }
+
+    .calendar-header h3 {
+      font-size: 18px;
+    }
+
+    .calendar-table th,
+    .calendar-table td {
+      font-size: 14px;
+      padding: 8px;
+    }
+
+    .duration-buttons {
+      flex-direction: column;
+      gap: 10px;
+
+      .duration-option {
+        font-size: 14px;
+        padding: 10px 15px;
+      }
+    }
+
+    .calendar-actions button {
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .calendar-header p {
+      font-size: 10px;
+    }
+
+    .calendar-header h3 {
+      font-size: 16px;
+    }
+
+    .duration-buttons .duration-option {
+      font-size: 12px;
+      padding: 8px 12px;
+    }
+
+    .calendar-actions button {
+      font-size: 12px;
+      padding: 6px 12px;
     }
   }
 }

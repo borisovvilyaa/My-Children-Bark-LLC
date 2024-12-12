@@ -210,6 +210,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .calendar-range {
   .calendars {
@@ -281,6 +282,18 @@ export default {
     td {
       color: #9e7549;
 
+      &.range {
+        background-color: #bb8b5a;
+        color: #fff;
+      }
+
+      &.range-start,
+      &.range-end {
+        background-color: #bb8b5a;
+        color: #fff;
+        font-weight: bold;
+      }
+
       &.selected {
         background-color: #bb8b5a;
         color: #fff;
@@ -299,6 +312,108 @@ export default {
       &:hover:not(.disabled):not(.selected) {
         background-color: #f3e9db;
       }
+    }
+  }
+
+  .time-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .time-selector-group {
+    display: flex;
+    flex-direction: column; /* Располагаем элементы вертикально */
+    gap: 5px; /* Отступ между label и select */
+  }
+
+  label {
+    font-size: 14px;
+    color: #bb8b5a;
+    font-weight: 500;
+  }
+
+  select {
+    width: 150px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 2px solid #bb8b5a;
+    background-color: #f3e9db;
+    color: #9e7549;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.3s, background-color 0.3s, box-shadow 0.3s;
+    outline: none;
+  }
+
+  select:hover {
+    border-color: #bb8b5a;
+  }
+
+  select:focus {
+    border-color: #9e7549;
+    box-shadow: 0 0 5px rgba(158, 117, 73, 0.5);
+  }
+
+  .calendar-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Адаптивность */
+  @media (max-width: 768px) {
+    .calendars {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .calendar {
+      min-width: 100%;
+    }
+
+    .calendar-header p {
+      font-size: 12px;
+    }
+
+    .calendar-header h3 {
+      font-size: 18px;
+    }
+
+    .calendar-table th,
+    .calendar-table td {
+      font-size: 14px;
+    }
+
+    select {
+      width: 100%;
+    }
+
+    .time-selector-group {
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .calendar-header p {
+      font-size: 10px;
+    }
+
+    .calendar-header h3 {
+      font-size: 16px;
+    }
+
+    .calendar-table th,
+    .calendar-table td {
+      font-size: 12px;
+    }
+
+    .calendar-actions {
+      flex-direction: column;
+    }
+
+    button {
+      width: 100%;
     }
   }
 }

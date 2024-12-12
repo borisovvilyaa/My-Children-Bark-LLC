@@ -6,16 +6,15 @@
         <i class="bi bi-x-lg"></i>
       </button>
       <h3>Edit Order</h3>
-      <form @submit.prevent="saveAndClose">
+      <form @submit.prevent="handleSubmit">
         <div class="form-group">
           <!-- Render the appropriate calendar based on the service type -->
           <component
-            :is="getCalendarComponent(localOrder.service)"
+            :is="calendarComponent"
             v-model="localOrder.selectedDate"
             @update:dates="updateSelectedDate"
           />
         </div>
-        <button type="submit" class="primary-btn">Save</button>
       </form>
     </div>
   </div>
@@ -41,6 +40,19 @@ export default {
       localOrder: { ...this.currentOrder },
     };
   },
+  computed: {
+    // Определяем компонент календаря на основе типа услуги
+    calendarComponent() {
+      const componentMap = {
+        Boarding: "CalendarRange",
+        "House Sitting": "CalendarRange",
+        "Doggy Day Care": "CalendarMultiple",
+        "Dog Walking": "CalendarWalk",
+        "Drop-in Home Visit": "CalendarWalk",
+      };
+      return componentMap[this.localOrder.service] || "CalendarWalk";
+    },
+  },
   methods: {
     // Обновление выбранных дат
     updateSelectedDate({ dates, duration, formatted }) {
@@ -53,11 +65,12 @@ export default {
 
     // Закрытие модального окна
     closeModal() {
+      document.body.classList.remove("no-scroll");
       this.$emit("close");
     },
 
-    // Сохранение изменений и закрытие модального окна
-    saveAndClose() {
+    // Обработка отправки формы
+    handleSubmit() {
       this.updateOrder();
       this.closeModal();
     },
@@ -65,22 +78,6 @@ export default {
     // Обновление заказа
     updateOrder() {
       this.$emit("update", this.localOrder);
-    },
-
-    // Получение компонента календаря в зависимости от типа услуги
-    getCalendarComponent(serviceType) {
-      switch (serviceType) {
-        case "Boarding":
-        case "House Sitting":
-          return "CalendarRange";
-        case "Doggy Day Care":
-          return "CalendarMultiple";
-        case "Dog Walking":
-        case "Drop-in Home Visit":
-          return "CalendarWalk";
-        default:
-          return "CalendarWalk";
-      }
     },
   },
   watch: {
@@ -90,6 +87,17 @@ export default {
         this.localOrder = { ...newOrder };
       },
       deep: true,
+    },
+    // Блокировка/разблокировка прокрутки при открытии/закрытии модального окна
+    showModal: {
+      immediate: true,
+      handler(newVal) {
+        if (newVal) {
+          document.body.classList.add("no-scroll");
+        } else {
+          document.body.classList.remove("no-scroll");
+        }
+      },
     },
   },
 };
@@ -110,6 +118,8 @@ export default {
 }
 
 .modal-content {
+  max-height: 90vh; /* Ограничиваем высоту модального окна */
+  overflow-y: auto; /* Добавляем вертикальную прокрутку */
   background: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -118,6 +128,16 @@ export default {
   max-width: 1100px;
   position: relative;
   animation: slideUp 0.3s;
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 95%;
+    padding: 10px;
+  }
 }
 
 .close-btn {
@@ -129,6 +149,12 @@ export default {
   font-size: 1.5rem;
   color: #4d3b2e;
   cursor: pointer;
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+    top: 5px;
+    right: 5px;
+  }
 }
 
 .primary-btn {
@@ -138,5 +164,54 @@ export default {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    padding: 8px 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+  }
+}
+
+h3 {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    gap: 15px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
+}
+.no-scroll {
+  overflow: hidden;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    gap: 8px;
+  }
 }
 </style>
